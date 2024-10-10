@@ -1,0 +1,146 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/">چت روم</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarScroll"
+      aria-controls="navbarScroll"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarScroll">
+      <ul
+        class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll"
+        style="--bs-scroll-height: 100px"
+      >
+        <li class="nav-item">
+          <!-- https://localhost:4200/messages -->
+          <a
+            class="nav-link"
+            routerLinkActive="active"
+            aria-current="page"
+            [routerLinkActiveOptions]="{ exact: true }"
+            routerLink="/"
+            >خانه</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLinkActive="active"
+            aria-current="page"
+            routerLink="/members"
+            >لیست کاربران</a
+          >
+        </li>
+        <li class="nav-item" *appHasInRole="['admin', 'superAdmin']">
+          <a
+            class="nav-link"
+            routerLinkActive="active"
+            aria-current="page"
+            routerLink="/admin"
+            >پنل ادمین</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLinkActive="active"
+            aria-current="page"
+            routerLink="/lists"
+            >لایک ها</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLinkActive="active"
+            aria-current="page"
+            routerLink="/messages"
+            >پیام ها</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLinkActive="active"
+            aria-current="page"
+            routerLink="/errors"
+            >خطا ها</a
+          >
+        </li>
+      </ul>
+      <div
+        class="dropdown mr-10"
+        *ngIf="currentUser$ | async as User"
+        dropdown
+        placement="bottom left"
+      >
+        <img
+          style="max-width: 60px; margin-right: 5px"
+          class="img-thumbnail p-1"
+          [src]="User.photoUrl || './assets/images/user.png'"
+          [alt]="User.userName"
+        />
+        <a
+          class="btn btn-secondary dropdown-toggle"
+          role="button"
+          dropdownToggle
+          id="dropdownMenuLink"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          خوش آمدید {{ User.userName | uppercase }}
+        </a>
+
+        <ul
+          *dropdownMenu
+          class="dropdown-menu"
+          aria-labelledby="dropdownMenuLink"
+        >
+          <li>
+            <a class="dropdown-item" [routerLink]="['/members', 'edit']"
+              >ویرایش پروفایل</a
+            >
+          </li>
+          <li>
+            <a class="dropdown-item" (click)="logout()">
+              خروج <span class="fas fa-sign-out-alt"></span
+            ></a>
+          </li>
+        </ul>
+      </div>
+
+      <form
+        *ngIf="(currentUser$ | async) === null"
+        (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        class="d-flex"
+      >
+        <input
+          type="text"
+          formControlName="userName"
+          class="form-control me-2"
+          placeholder="userName"
+        />
+        <input
+          type="password"
+          formControlName="password"
+          class="form-control me-2"
+          placeholder="password"
+        />
+        <button
+          class="btn btn-outline-success me-2"
+          type="submit"
+          [disabled]="form.invalid"
+        >
+          ورود
+        </button>
+      </form>
+    </div>
+  </div>
+</nav>
